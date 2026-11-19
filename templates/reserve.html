@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Reserve | Dawasan Cafe{% endblock %}
+
+{% block content %}
+<section class="section page-top">
+  <p class="eyebrow">Book a Table</p>
+  <h2>Reservation</h2>
+  <p class="lead">{% if info %}{{ info.opening_hours }}{% endif %}</p>
+
+  <form method="post" class="form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn">Request Reservation</button>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section id="home" class="hero">
+  <p class="eyebrow">Specialty Coffee &amp; Patisserie</p>
+  <h1>Dawasan <span>Cafe</span></h1>
+  <p class="tagline">{% if info %}{{ info.tagline }}{% else %}Where every cup is an occasion.{% endif %}</p>
+  <a href="/#menu" class="btn">Explore the Menu</a>
+  <a href="/#about" class="scroll-hint">Scroll ↓</a>
+</section>
+
+<section id="about" class="section full reveal">
+  <p class="eyebrow">Our Story</p>
+  <h2>About Dawasan</h2>
+  <p class="lead">{% if info and info.about_text %}{{ info.about_text }}{% else %}We source rare beans, roast in small batches and bake daily, so every visit feels unhurried and exceptional.{% endif %}</p>
+  {% if gallery %}
+  <div class="gallery">
+    {% for g in gallery %}<img src="{{ g.image.url }}" alt="{{ g.title }}">{% endfor %}
+  </div>
+  {% endif %}
+</section>
+
+<section id="menu" class="section dark full reveal">
+  <p class="eyebrow">The Menu</p>
+  <h2>Our Selection</h2>
+
+  {% if featured %}
+  <div class="cards">
+    {% for item in featured %}
+    <div class="card">
+      {% if item.image %}<img src="{{ item.image.url }}" alt="{{ item.name }}">{% endif %}
+      <h3>{{ item.name }}</h3>
+      <p>{{ item.description }}</p>
+      <span class="price">${{ item.price }}</span>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="menu-grid">
+    {% for category in categories %}
+    <div class="menu-col">
+      <h3>{{ category.name }}</h3>
+      {% for item in category.items.all %}
+        {% if item.available %}
+        <div class="item">
+          <div class="item-head">
+            <span>{{ item.name }}{% if item.vegetarian %} <small class="veg">VEG</small>{% endif %}</span>
+            <i></i><span class="price">${{ item.price }}</span>
+          </div>
+          <p>{{ item.description }}</p>
+        </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<section id="reserve" class="section full reveal">
+  <p class="eyebrow">Book a Table</p>
+  <h2>Reservation</h2>
+  <p class="lead">{% if info %}{{ info.opening_hours }}{% endif %}</p>
+  <form method="post" action="{% url 'reserve' %}" class="form">
+    {% csrf_token %}
+    {{ reservation_form.as_p }}
+    <button type="submit" class="btn">Request Reservation</button>
+  </form>
+</section>
+
+<section id="contact" class="section dark full reveal">
+  <p class="eyebrow">Get in Touch</p>
+  <h2>Contact</h2>
+  {% if info %}
+  <p class="lead">
+    {{ info.address }}<br>
+    {{ info.phone }}{% if info.email %} · {{ info.email }}{% endif %}
+  </p>
+  {% endif %}
+  <form method="post" action="{% url 'contact' %}" class="form">
+    {% csrf_token %}
+    {{ contact_form.as_p }}
+    <button type="submit" class="btn">Send Message</button>
+  </form>
+</section>
+
+{% endblock %}

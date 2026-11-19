@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Menu | Dawasan Cafe{% endblock %}
+
+{% block content %}
+<section class="section dark page-top">
+  <p class="eyebrow">The Menu</p>
+  <h2>Our Selection</h2>
+
+  <div class="menu-grid">
+    {% for category in categories %}
+    <div class="menu-col">
+      <h3>{{ category.name }}</h3>
+      {% for item in category.items.all %}
+        {% if item.available %}
+        <div class="item">
+          {% if item.image %}<img class="item-img" src="{{ item.image.url }}" alt="{{ item.name }}">{% endif %}
+          <div class="item-head">
+            <span>{{ item.name }}{% if item.vegetarian %} <small class="veg">VEG</small>{% endif %}</span>
+            <i></i><span class="price">${{ item.price }}</span>
+          </div>
+          <p>{{ item.description }}</p>
+        </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

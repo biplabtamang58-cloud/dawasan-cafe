@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}About | Dawasan Cafe{% endblock %}
+
+{% block content %}
+<section class="section page-top">
+  <p class="eyebrow">Our Story</p>
+  <h2>About Dawasan</h2>
+  <p class="lead">{% if info and info.about_text %}{{ info.about_text }}{% else %}We source rare beans, roast in small batches and bake daily.{% endif %}</p>
+  {% if gallery %}
+  <div class="gallery">
+    {% for g in gallery %}<img src="{{ g.image.url }}" alt="{{ g.title }}">{% endfor %}
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

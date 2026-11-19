@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>{% block title %}Dawasan Cafe{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>.burger{display:none}</style>
+  <link rel="stylesheet" href="{% static 'cafe/style.css' %}?v=3">
+</head>
+<body>
+
+<header class="nav">
+  <a href="/#home" class="logo">DAWASAN</a>
+  <button class="burger" aria-label="Toggle menu" onclick="document.body.classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </button>
+  <nav>
+    <a href="/#home">Home</a>
+    <a href="/#about">About</a>
+    <a href="/#menu">Menu</a>
+    <a href="/#reserve">Reserve</a>
+    <a href="/#contact">Contact</a>
+  </nav>
+</header>
+
+{% if messages %}
+<div class="messages">
+  {% for m in messages %}<p class="msg">{{ m }}</p>{% endfor %}
+</div>
+{% endif %}
+
+<main>
+  {% block content %}{% endblock %}
+</main>
+
+<footer>
+  {% if info %}
+    <p>{{ info.address }}{% if info.phone %} · {{ info.phone }}{% endif %}</p>
+    <p>{{ info.opening_hours }}</p>
+  {% endif %}
+  <p>© {% now "Y" %} Dawasan Cafe. All rights reserved.</p>
+</footer>
+
+<script>
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('show'); });
+  }, { threshold: 0, rootMargin: '0px 0px -10% 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  const links = document.querySelectorAll('.nav nav a');
+  const spy = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '/#' + e.target.id));
+      }
+    });
+  }, { rootMargin: '-50% 0px -50% 0px' });
+  document.querySelectorAll('main section[id]').forEach(s => spy.observe(s));
+
+  links.forEach(a => a.addEventListener('click', () => document.body.classList.remove('open')));
+
+  setTimeout(() => document.querySelector('.messages')?.remove(), 5000);
+</script>
+</body>
+</html>
